@@ -38,8 +38,8 @@ void *lookup_symbol(const char *symbol)
     slide = (unsigned long long)(void *)printf - slide_address;
     int64_t base_address = slide + KERNEL_BASE;
     
-    IOLog("LittleRooter: %s: aslr slide: 0x%0llx\n", __func__, slide);
-    IOLog("LittleRooter: %s: base address: 0x%0llx\n", __func__, base_address);
+    IOLog("%s: aslr slide: 0x%0llx\n", __func__, slide);
+    IOLog("%s: base address: 0x%0llx\n", __func__, base_address);
     
     return find_symbol((struct mach_header_64 *)base_address, symbol);
 }
@@ -101,20 +101,20 @@ find_symbol(struct mach_header_64 *mh, const char *name)
     
     /* check header (0xfeedfccf) */
     if (mh->magic != MH_MAGIC_64) {
-        IOLog("LittleRooter %s: magic number doesn't match - 0x%x\n", __func__, mh->magic);
+        IOLog("%s: magic number doesn't match - 0x%x\n", __func__, mh->magic);
         return NULL;
     }
     
     /* find the __LINKEDIT segment and LC_SYMTAB command */
     linkedit = find_segment_64(mh, SEG_LINKEDIT);
     if (!linkedit) {
-        IOLog("LittleRooter %s: couldn't find __LINKEDIT\n", __func__);
+        IOLog("%s: couldn't find __LINKEDIT\n", __func__);
         return NULL;
     }
     
     symtab = (struct symtab_command *)find_load_command(mh, LC_SYMTAB);
     if (!symtab) {
-        IOLog("LittleRooter %s: couldn't find LC_SYMTAB\n", __func__);
+        IOLog("%s: couldn't find LC_SYMTAB\n", __func__);
         return NULL;
     }
     
@@ -130,7 +130,7 @@ find_symbol(struct mach_header_64 *mh, const char *name)
         char *str = (char *)strtab + nl->n_un.n_strx;
         
         if (strcmp(str, name) == 0) {
-            IOLog("LittleRooter %s: symbol %s at address %llx\n", __func__, str, (uint64_t)nl->n_value);
+            IOLog("%s: symbol %s at address %llx\n", __func__, str, (uint64_t)nl->n_value);
             addr = (void *)nl->n_value;
         }
     }

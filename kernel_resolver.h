@@ -8,8 +8,6 @@
 #include <vm/vm_kern.h>
 #include <sys/sysctl.h>
 
-#include "LittleFlockerClientShared.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
